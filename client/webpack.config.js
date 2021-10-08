@@ -8,7 +8,7 @@ const Dotenv = require('dotenv-webpack');
 const config = (env, options) => {
     return {
         entry: [
-            './src/index.tsx'
+            './src/index.js'
         ],
         devtool: 'inline-source-map',
         output: {

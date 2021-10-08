@@ -1,8 +1,8 @@
 {
-    "key": "test",
-    "name": "TEST",
-    "description": "Some desc",
-    "baseUrl": "https://f75c-5-58-4-42.ngrok.io",
+    "key": "map-routing",
+    "name": "Map Routing",
+    "description": "This Diploma app Map Routing for Jira",
+    "baseUrl": "https://cdc4-5-58-28-68.ngrok.io",
     "authentication": {
         "type": "jwt"
     },
@@ -12,6 +12,7 @@
     "scopes": [
         "READ", "WRITE"
     ],
+
     "modules": {
         "generalPages": [
             {
