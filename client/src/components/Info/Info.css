@@ -1,0 +1,13 @@
+.result-container{
+    background: #E07748;
+    color: #E5E5E5;
+    font-size: 20px;
+    width: 100%;
+    height: 250px;
+}
+
+.result-text{
+    padding-top: 3px;
+    font-family: "Al Nile", emoji;
+    padding-left: 20px;
+}
