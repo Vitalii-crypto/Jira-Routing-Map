@@ -4,10 +4,11 @@
     font-size: 20px;
     width: 100%;
     height: 250px;
+    padding-left: 20px;
 }
 
 .result-text{
     padding-top: 3px;
     font-family: "Al Nile", emoji;
-    padding-left: 20px;
+    padding-left: 520px;
 }
