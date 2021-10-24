@@ -1,37 +1,34 @@
-import React from "react";
-import './Header.css';
-import {Nav, Navbar} from "react-bootstrap";
+import React, {useEffect} from 'react';
 
 
 function Header() {
 
+useEffect(() =>{
+
+    fetch('https://graphicks.atlassian.net/rest/api/3/project/search', {
+        method: 'GET',
+        headers: {
+            'Authorization': `Basic ${Buffer.from(
+                'wanoplus@gmail.com:5VgMYOJ0tg9HmJy5ZlZh4261'
+            ).toString('base64')}`,
+            'Accept': 'application/json'
+        }
+    })
+        .then(response => {
+            console.log(
+                `Response: ${response.status} ${response.statusText}`
+            );
+            return response.text();
+        })
+        .then(text => console.log(text))
+        .catch(err => console.error(`${err} YA YEBIU SOBAK`));
+}, [])
+
+
+
     return(
-        <>
-            <div className="header">
-                <Navbar id='navbar' collapseOnSelect expand="lg">
-                    <Navbar.Brand id="br"> VA
-                    <span id='map'> MAPS </span>
-                    </Navbar.Brand>
-                    <Navbar.Toggle id='navtoggle' aria-controls="responsive-navbar-nav"/>
-                    <Navbar.Collapse  id="responsive-navbar-nav">
-                        <Nav className="me-auto">
-                            <div className='button-bg'>
-                                <button className="buttonGroup"> Cart </button>
-                                <button className='buttonGroup'> Shop </button>
-                                <button className='buttonGroup'> About  </button>
-
-                                <p id='logo-colapsed'>
-                                    VA
-                                </p>
-                            </div>
-
-                            <div>
-                            </div>
-                        </Nav>
-                    </Navbar.Collapse>
-                </Navbar>
-            </div>
-        </>
-    );
+        <h1>HUY</h1>
+    )
 }
+
 export default Header;

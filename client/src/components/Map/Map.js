@@ -1,8 +1,7 @@
-import React, {useState} from 'react';
+import React  from 'react';
 import './Map.css'
 import Info from "../Info/Info";
 import {Dropdown} from "react-bootstrap";
-import Search from "../Search/Search";
 const google = window.google;
 const {
     compose,
@@ -17,7 +16,7 @@ const {
     DirectionsRenderer,
 } = require("react-google-maps");
 require('dotenv').config()
-const { SearchBox } = require("react-google-maps/lib/components/places/SearchBox");
+// const { SearchBox } = require("react-google-maps/lib/components/places/SearchBox");
 let modeTraveling = 'DRIVING';
 
 export const MapWithADirectionsRenderer = compose(

@@ -11,26 +11,31 @@ function Search() {
     const InputItem = () => <div className='row-container'>
         {setCount(count + 1)}
             <input className='search-input'/>
+
         <button className='del-button'
-                onClick={()=>(
-                    {...placeInputs.filter((id) => {
-                            console.log(id !== id)
-                        })
-                    })}
+                onClick={HandleDeleteItem}
         > - point {count}</button>
 
     </div>
+
+
+    function HandleDeleteItem() {
+        placeInputs.filter((id => {
+                return id !== id
+            }
+        ))}
+    // console.log(HandleDeleteItem)
+
 
     return(
         <div className='input-search-container'>
             <button className='add-button'
                 onClick={() => setPlaceInputs([...placeInputs, <InputItem/>])}
             >
-                Add WayPoint {count}
+                Add WayPoint
             </button>
             {placeInputs.map((input , id)=>{
                 return <div>
-                    id:{id}
                     {input}
                 </div>
             })}
