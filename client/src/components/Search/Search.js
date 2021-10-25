@@ -3,28 +3,21 @@ import './Search.css';
 
 function Search() {
 
-
     const [placeInputs , setPlaceInputs] = useState([])
     const [count , setCount] = useState(1)
 
 
-    const InputItem = () => <div className='row-container'>
+    const InputItem = (arr) => <div className='row-container'>
         {setCount(count + 1)}
-            <input className='search-input'/>
+            <input className='search-input'
+            />
 
         <button className='del-button'
-                onClick={HandleDeleteItem}
+                onDelete={()=>setPlaceInputs([placeInputs !== placeInputs])}
         > - point {count}</button>
 
     </div>
 
-
-    function HandleDeleteItem() {
-        placeInputs.filter((id => {
-                return id !== id
-            }
-        ))}
-    // console.log(HandleDeleteItem)
 
 
     return(

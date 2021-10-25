@@ -21,10 +21,10 @@ let modeTraveling = 'DRIVING';
 
 export const MapWithADirectionsRenderer = compose(
     withProps({
-        googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_API_KEY}&v=3.exp&libraries=geometry,drawing,places`,
+        googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_API_KEY}.exp&libraries=geometry,drawing,places`,
         loadingElement: <div style={{ height: `100%` }} />,
-        containerElement: <div style={{ height: `600px` }} />,
-        mapElement: <div style={{ height: `100%` }} />,
+        containerElement: <div style={{ height: `812px` }} />,
+        mapElement: <div style={{ height: `100%` , width: '80%' }} />,
         mapId: "c8d3fb7368eb6e72"
     }),
     withScriptjs,
@@ -39,7 +39,6 @@ export const MapWithADirectionsRenderer = compose(
             const DirectionsService = new google.maps.DirectionsService();
             const originInput = document.querySelector(".origin");
             const destinationInput = document.querySelector(".destination");
-
             const buttonSearch = document.querySelector(".buttonSearch");
 
 
