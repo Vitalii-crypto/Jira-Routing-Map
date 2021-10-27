@@ -1,4 +1,4 @@
-import React  from 'react';
+import React, {useContext} from 'react';
 import './Map.css'
 import Info from "../Info/Info";
 import {Dropdown} from "react-bootstrap";
@@ -18,7 +18,7 @@ const {
 require('dotenv').config()
 // const { SearchBox } = require("react-google-maps/lib/components/places/SearchBox");
 let modeTraveling = 'DRIVING';
-
+// const tags = useContext(tagsContext)
 export const MapWithADirectionsRenderer = compose(
     withProps({
         googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_API_KEY}.exp&libraries=geometry,drawing,places`,
@@ -38,7 +38,7 @@ export const MapWithADirectionsRenderer = compose(
             const DirectionsService = new google.maps.DirectionsService();
             const originInput = document.querySelector(".origin");
             const destinationInput = document.querySelector(".destination");
-            const buttonSearch = document.querySelector(".buttonSearch");
+            const buttonSearch = document.querySelector(".buttonSearchcustom");
 
 
 
@@ -124,8 +124,10 @@ export const MapWithADirectionsRenderer = compose(
                     }
                 });
             })
+
         }
     })
+
 )(props =>
     <>
         <div className='input-container'>
@@ -135,13 +137,12 @@ export const MapWithADirectionsRenderer = compose(
             </label>
             <label>
                 <p className='text-on-input'>  Point B </p>
-
                 <input className="destination"/>
-
             </label>
         </div>
             <div className='select-mode-container'>
-                <button disabled={true} className="buttonSearch">Search</button>
+                {/*<button disabled={true} className="buttonSearch">Search</button>*/}
+                <button disabled={true} className="buttonSearchcustom"><span>Click!</span><span>Build Direction</span></button>
                 <Dropdown>
                     <Dropdown.Toggle>
                         mode: {modeTraveling}
@@ -150,7 +151,7 @@ export const MapWithADirectionsRenderer = compose(
                         <Dropdown.Item onClick={()=>{modeTraveling = 'DRIVING'}} href="#/action-1">Driving</Dropdown.Item>
                         <Dropdown.Item onClick={()=>{modeTraveling = 'BICYCLING'}} href="#/action-2">Bicycling</Dropdown.Item>
                         <Dropdown.Item onClick={()=>{modeTraveling = 'TRANSIT'}} href="#/action-3">Transit</Dropdown.Item>
-                        <Dropdown.Item onClick={()=>{modeTraveling = 'WALKING'}} href="#/action-4">Walking</Dropdown.Item>
+                        <Dropdown.Item onClick={()=>{modeTraveling = 'WALKING'}} href="#/action-4">Walking  </Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
             </div>

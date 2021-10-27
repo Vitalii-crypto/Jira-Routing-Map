@@ -1,7 +1,6 @@
 import React from 'react';
 import './Search.css';
 
-
 class InputTag extends React.Component {
     constructor() {
         super();
@@ -12,6 +11,7 @@ class InputTag extends React.Component {
             ]
         };
     }
+
 
     removeTag = (i) => {
         const newTags = [ ...this.state.tags ];
@@ -32,8 +32,11 @@ class InputTag extends React.Component {
         }
     }
 
+
+
     render() {
         const { tags } = this.state;
+        const tagsContext = React.createContext(this.state.tags);
 
         return (
             <div className="input-tag">
@@ -41,6 +44,7 @@ class InputTag extends React.Component {
                     { tags.map((tag, i) => (
                         <li key={tag}
                         >
+                            {console.log(tagsContext)}
                             {tag}
                             <button type="button" onClick={() => { this.removeTag(i); }}>+</button>
                         </li>

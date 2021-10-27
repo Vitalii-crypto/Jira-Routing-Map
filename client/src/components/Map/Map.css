@@ -38,18 +38,23 @@
     margin-top: 25px;
     padding-top: 0.1em;
     padding-left: 0.8em;
-    margin-left: 80px;
+    margin-left: 50px;
     color: #FFFFFF;
     border: none;
-    border-radius: 35px;
+    border-radius: 3px;
     width: 170px;
-    height: 30px;
+    height: 41px;
+    box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+    7px 7px 20px 0px rgba(0,0,0,.1),
+    4px 4px 5px 0px rgba(0,0,0,.1);
 }
 
 .btn:hover {
-   border: 2px solid white;
+    border: none;
     background: #4285F4;
 }
+
+
 
 .text-on-input{
     color: black;
@@ -60,7 +65,6 @@
 
 
 .origin{
-
     border-color: #4285F4;
     margin-left: 10px;
 }
@@ -72,17 +76,17 @@
 
 
 
-.buttonSearch{
-    text-align: center;
-    background: #4285F4;
-    margin-top: 25px;
-    color: #FFFFFF;
-    border: none;
-    border-radius: 15px;
-    width: 120px;
-    height: 30px;
-    margin-left: 35px;
-}
+/*.buttonSearch{*/
+/*    text-align: center;*/
+/*    background: #4285F4;*/
+/*    margin-top: 25px;*/
+/*    color: #FFFFFF;*/
+/*    border: none;*/
+/*    border-radius: 15px;*/
+/*    width: 120px;*/
+/*    height: 30px;*/
+/*    margin-left: 35px;*/
+/*}*/
 
 
 
@@ -102,4 +106,77 @@
 .show>.btn-primary.dropdown-toggle {
     color: #fff;
     background-color: #4285F4;
+}
+
+
+.buttonSearchcustom{
+    position: relative;
+    right: 20px;
+    bottom: 20px;
+    border:none;
+    box-shadow: none;
+    width: 130px;
+    height: 40px;
+    margin-left: 58px;
+    margin-top: 25px;
+    line-height: 42px;
+    -webkit-perspective: 230px;
+    perspective: 230px;
+    background: transparent;
+}
+.buttonSearchcustom span {
+    background: #4285F4;
+    display: block;
+    position: absolute;
+    width: 130px;
+    height: 40px;
+    box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+    7px 7px 20px 0px rgba(0,0,0,.1),
+    4px 4px 5px 0px rgba(0,0,0,.1);
+    border-radius: 5px;
+    margin:0;
+    text-align: center;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-transition: all .3s;
+    transition: all .3s;
+}
+.buttonSearchcustom span:nth-child(1) {
+    box-shadow:
+            -7px -7px 20px 0px #fff9,
+            -4px -4px 5px 0px #fff9,
+            7px 7px 20px 0px #0002,
+            4px 4px 5px 0px #0001;
+    -webkit-transform: rotateX(90deg);
+    -moz-transform: rotateX(90deg);
+    transform: rotateX(90deg);
+    -webkit-transform-origin: 50% 50% -20px;
+    -moz-transform-origin: 50% 50% -20px;
+    transform-origin: 50% 50% -20px;
+}
+.buttonSearchcustom span:nth-child(2) {
+    -webkit-transform: rotateX(0deg);
+    -moz-transform: rotateX(0deg);
+    transform: rotateX(0deg);
+    -webkit-transform-origin: 50% 50% -20px;
+    -moz-transform-origin: 50% 50% -20px;
+    transform-origin: 50% 50% -20px;
+}
+.buttonSearchcustom:hover span:nth-child(1) {
+    box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+    7px 7px 20px 0px rgba(0,0,0,.1),
+    4px 4px 5px 0px rgba(0,0,0,.1);
+    -webkit-transform: rotateX(0deg);
+    -moz-transform: rotateX(0deg);
+    transform: rotateX(0deg);
+}
+.buttonSearchcustom:hover span:nth-child(2) {
+    box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+    7px 7px 20px 0px rgba(0,0,0,.1),
+    4px 4px 5px 0px rgba(0,0,0,.1);
+    color: transparent;
+    -webkit-transform: rotateX(-90deg);
+    -moz-transform: rotateX(-90deg);
+    transform: rotateX(-90deg);
 }

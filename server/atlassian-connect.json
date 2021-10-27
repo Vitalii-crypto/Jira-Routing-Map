@@ -2,7 +2,7 @@
     "key": "map-routing",
     "name": "Routing Map",
     "description": "This Diploma app Map Routing for Jira",
-    "baseUrl": "https://4f3e-5-58-33-44.ngrok.io",
+    "baseUrl": "https://8a1f-5-58-33-44.ngrok.io",
     "authentication": {
         "type": "jwt"
     },
