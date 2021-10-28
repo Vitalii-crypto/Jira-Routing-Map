@@ -1,13 +1,20 @@
 import './App.css';
-import React from 'react';
-import {MapWithADirectionsRenderer as Map} from "./components/Map/Map";
+import React, { useState } from 'react';
+import {MapWithADirectionsRenderer} from "./components/Map/Map";
 import Search from "./components/Search/Search";
 
+export const AppContext = React.createContext({});
+
 function App() {
+    const [tags, setTags] = useState([]);
+
     return (
         <>
-            <Map/>
-            <Search/>
+            <AppContext.Provider value={{tags, setTags}}>
+
+                <MapWithADirectionsRenderer/>
+                <Search/>
+            </AppContext.Provider>
         </>
     );
 }

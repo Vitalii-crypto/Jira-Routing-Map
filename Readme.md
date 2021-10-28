@@ -3,7 +3,7 @@
 ## using: react-google-map, react bootstrap
 
 ## Installation
-### cd atlas-connect-demo, npm install 
+### cd Routing-Map, npm install 
 ### cd client && npm install 
 ### cd server && npm install
 ## Development
@@ -11,4 +11,4 @@
 ## Production
 ### cd client && npm run build
 ### cd server && npm run standalone-server
-### cd server && atlas-connect.json $$ change base url
+### cd server && atlas-connect.json && change base url

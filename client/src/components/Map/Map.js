@@ -2,6 +2,7 @@ import React, {useContext} from 'react';
 import './Map.css'
 import Info from "../Info/Info";
 import {Dropdown} from "react-bootstrap";
+import { AppContext } from '../../App';
 const google = window.google;
 const {
     compose,
@@ -16,16 +17,19 @@ const {
     DirectionsRenderer,
 } = require("react-google-maps");
 require('dotenv').config()
-// const { SearchBox } = require("react-google-maps/lib/components/places/SearchBox");
+
+
 let modeTraveling = 'DRIVING';
-// const tags = useContext(tagsContext)
+
 export const MapWithADirectionsRenderer = compose(
+
     withProps({
         googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_API_KEY}.exp&libraries=geometry,drawing,places`,
         loadingElement: <div style={{ height: `100%` }} />,
         containerElement: <div style={{ height: `650px` }} />,
         mapElement: <div style={{ height: `100%`}} />,
-        mapId: "c8d3fb7368eb6e72"
+        mapId: "c8d3fb7368eb6e72",
+
     }),
     withScriptjs,
     withGoogleMap,
@@ -43,7 +47,6 @@ export const MapWithADirectionsRenderer = compose(
 
 
             originInput.addEventListener('input',async (e)=>{
-                console.log('change origin')
                 this.setState({
                     inputOrigin: e.target.value,
                 });
@@ -51,7 +54,6 @@ export const MapWithADirectionsRenderer = compose(
             })
 
             destinationInput.addEventListener('input',(e)=>{
-                console.log('change destination')
                 this.setState({
                     inputDestination: e.target.value,
                 });
@@ -65,7 +67,7 @@ export const MapWithADirectionsRenderer = compose(
             buttonSearch.addEventListener('click',async (e)=>{
                 const geocoder =  new google.maps.Geocoder();
                 const waypointInputs = document.querySelectorAll(".waypoints");
-                console.log('inputs',waypointInputs);
+
 
                 async function coordinates(string, isObj){
                     let coord;
@@ -79,7 +81,6 @@ export const MapWithADirectionsRenderer = compose(
                         }
                     });
 
-                    console.log(string, coord, isObj);
 
                     if(isObj) return {
                         location: coord,
@@ -97,18 +98,16 @@ export const MapWithADirectionsRenderer = compose(
 
                     const coord = coordinates(el.value, true);
                     propmicesArr.push(coord);
-                    console.log(coord);
 
                 })
 
                 await Promise.all(propmicesArr).then(values => {
-                    console.log(values);
                     waypointsArr = [...values];
                 });
 
                 let finalOrigin = await coordinates(this.state.inputOrigin, false);
                 let finalDestination = await coordinates(this.state.inputDestination, false);
-                console.log('waypoints', waypointsArr);
+
                 await DirectionsService.route({
                     origin: finalOrigin,
                     destination: finalDestination,
@@ -126,10 +125,13 @@ export const MapWithADirectionsRenderer = compose(
             })
 
         }
+
     })
+
 
 )(props =>
     <>
+
         <div className='input-container'>
             <label>
                 <p className='text-on-input'>  Point A </p>
@@ -141,7 +143,6 @@ export const MapWithADirectionsRenderer = compose(
             </label>
         </div>
             <div className='select-mode-container'>
-                {/*<button disabled={true} className="buttonSearch">Search</button>*/}
                 <button disabled={true} className="buttonSearchcustom"><span>Click!</span><span>Build Direction</span></button>
                 <Dropdown>
                     <Dropdown.Toggle>
@@ -154,6 +155,7 @@ export const MapWithADirectionsRenderer = compose(
                         <Dropdown.Item onClick={()=>{modeTraveling = 'WALKING'}} href="#/action-4">Walking  </Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
+
             </div>
 
         <GoogleMap
