@@ -1,171 +1,168 @@
-import React, {useContext} from 'react';
-import './Map.css'
-import Info from "../Info/Info";
-import {Dropdown} from "react-bootstrap";
+import React, { useContext, useState } from 'react';
+import { Dropdown } from 'react-bootstrap';
+import {
+  withScriptjs,
+  withGoogleMap,
+  GoogleMap,
+  DirectionsRenderer,
+} from 'react-google-maps';
+import { compose, withProps } from 'recompose';
+
 import { AppContext } from '../../App';
+import Info from '../Info/Info';
+
+import './Map.css';
+
+require('dotenv').config();
+
 const google = window.google;
-const {
-    compose,
-    withProps,
-    lifecycle
-} = require("recompose");
-
-const {
-    withScriptjs,
-    withGoogleMap,
-    GoogleMap,
-    DirectionsRenderer,
-} = require("react-google-maps");
-require('dotenv').config()
-
-
-let modeTraveling = 'DRIVING';
 
 export const MapWithADirectionsRenderer = compose(
+  withProps({
+    googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_API_KEY}.exp&libraries=geometry,drawing,places`,
+    loadingElement: <div style={{ height: `100%` }} />,
+    containerElement: <div style={{ height: `650px` }} />,
+    mapElement: <div style={{ height: `100%` }} />,
+    mapId: 'c8d3fb7368eb6e72',
+  }),
+  withScriptjs,
+  withGoogleMap
+)(() => {
+  const { tags } = useContext(AppContext);
 
-    withProps({
-        googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_API_KEY}.exp&libraries=geometry,drawing,places`,
-        loadingElement: <div style={{ height: `100%` }} />,
-        containerElement: <div style={{ height: `650px` }} />,
-        mapElement: <div style={{ height: `100%`}} />,
-        mapId: "c8d3fb7368eb6e72",
+  const [modeTraveling, setModeTraveling] = useState('DRIVING');
+  const [inputOrigin, setInputOrigin] = useState(null);
+  const [inputDestination, setInputDestination] = useState(null);
+  const [waypoints, setWaypoints] = useState([]);
+  const [directions, setDirections] = useState(null);
 
-    }),
-    withScriptjs,
-    withGoogleMap,
-    lifecycle({
+  const DirectionsService = new google.maps.DirectionsService();
 
+  const onOriginInputChange = (e) => {
+    setInputOrigin(e.target.value);
+  };
 
+  const onDestinationInputChange = (e) => {
+    setInputDestination(e.target.value);
+  };
 
-        componentDidMount() {
+  const onSearchButtonClick = async (e) => {
+    const geocoder = new google.maps.Geocoder();
 
-            const DirectionsService = new google.maps.DirectionsService();
-            const originInput = document.querySelector(".origin");
-            const destinationInput = document.querySelector(".destination");
-            const buttonSearch = document.querySelector(".buttonSearchcustom");
-
-
-
-            originInput.addEventListener('input',async (e)=>{
-                this.setState({
-                    inputOrigin: e.target.value,
-                });
-                buttonSearch.disabled = !((this.state?.inputOrigin) && (this.state?.inputDestination));
-            })
-
-            destinationInput.addEventListener('input',(e)=>{
-                this.setState({
-                    inputDestination: e.target.value,
-                });
-                buttonSearch.disabled = !((this.state?.inputOrigin) && (this.state?.inputDestination));
-
-            })
-
-
-
-
-            buttonSearch.addEventListener('click',async (e)=>{
-                const geocoder =  new google.maps.Geocoder();
-                const waypointInputs = document.querySelectorAll(".waypoints");
-
-
-                async function coordinates(string, isObj){
-                    let coord;
-                    await geocoder.geocode( { 'address': string}, async function(results, status) {
-                        if (status === google.maps.GeocoderStatus.OK) {
-                            let lat = results[0].geometry.location.lat();
-                            let lng = results[0].geometry.location.lng();
-                            coord = new google.maps.LatLng(lat,lng)
-                        } else {
-                            alert("Something got wrong " + status);
-                        }
-                    });
-
-
-                    if(isObj) return {
-                        location: coord,
-                        stopover: false
-                    }
-                    else return coord;
-                }
-
-                let waypointsArr = [];
-                const propmicesArr = [];
-
-
-
-                await waypointInputs.forEach((el)=>{
-
-                    const coord = coordinates(el.value, true);
-                    propmicesArr.push(coord);
-
-                })
-
-                await Promise.all(propmicesArr).then(values => {
-                    waypointsArr = [...values];
-                });
-
-                let finalOrigin = await coordinates(this.state.inputOrigin, false);
-                let finalDestination = await coordinates(this.state.inputDestination, false);
-
-                await DirectionsService.route({
-                    origin: finalOrigin,
-                    destination: finalDestination,
-                    waypoints: waypointsArr,
-                    travelMode: modeTraveling,
-                }, (result, status) => {
-                    if (status === google.maps.DirectionsStatus.OK) {
-                        this.setState({
-                            directions: result,
-                        });
-                    } else {
-                        alert("can`t build directions, chose another points");
-                    }
-                });
-            })
-
+    const getCoords = async (address, isObj = false) => {
+      let coord;
+      await geocoder.geocode({ address }, async (results, status) => {
+        if (status !== google.maps.GeocoderStatus.OK) {
+          alert('Something got wrong ' + status);
+          return;
         }
+        let lat = results[0].geometry.location.lat();
+        let lng = results[0].geometry.location.lng();
+        coord = new google.maps.LatLng(lat, lng);
+      });
 
-    })
+      if (!isObj) return coord;
 
+      return {
+        location: coord,
+        stopover: false,
+      };
+    };
 
-)(props =>
+    if (tags) {
+      await Promise.all(
+        tags.map(async (t) => {
+          const coords = await getCoords(t, true);
+          setWaypoints([...waypoints, coords]);
+        })
+      );
+    }
+
+    const finalOrigin = await getCoords(inputOrigin);
+    const finalDestination = await getCoords(inputDestination);
+
+    await DirectionsService.route(
+      {
+        origin: finalOrigin,
+        destination: finalDestination,
+        waypoints: waypoints,
+        travelMode: modeTraveling,
+      },
+      (result, status) => {
+        if (status !== google.maps.DirectionsStatus.OK)
+          alert('can`t build directions, chose another points');
+
+        setDirections(result);
+      }
+    );
+  };
+
+  return (
     <>
-
-        <div className='input-container'>
-            <label>
-                <p className='text-on-input'>  Point A </p>
-                <input className="origin"/>
-            </label>
-            <label>
-                <p className='text-on-input'>  Point B </p>
-                <input className="destination"/>
-            </label>
-        </div>
-            <div className='select-mode-container'>
-                <button disabled={true} className="buttonSearchcustom"><span>Click!</span><span>Build Direction</span></button>
-                <Dropdown>
-                    <Dropdown.Toggle>
-                        mode: {modeTraveling}
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu>
-                        <Dropdown.Item onClick={()=>{modeTraveling = 'DRIVING'}} href="#/action-1">Driving</Dropdown.Item>
-                        <Dropdown.Item onClick={()=>{modeTraveling = 'BICYCLING'}} href="#/action-2">Bicycling</Dropdown.Item>
-                        <Dropdown.Item onClick={()=>{modeTraveling = 'TRANSIT'}} href="#/action-3">Transit</Dropdown.Item>
-                        <Dropdown.Item onClick={()=>{modeTraveling = 'WALKING'}} href="#/action-4">Walking  </Dropdown.Item>
-                    </Dropdown.Menu>
-                </Dropdown>
-
-            </div>
-
-        <GoogleMap
-            defaultZoom={7}
-            defaultCenter={new google.maps.LatLng(50.0000, 28.0000)}
-
+      <div className='input-container'>
+        <label>
+          <p className='text-on-input'> Point A </p>
+          <input className='origin' onChange={onOriginInputChange} />
+        </label>
+        <label>
+          <p className='text-on-input'> Point B </p>
+          <input className='destination' onChange={onDestinationInputChange} />
+        </label>
+      </div>
+      <div className='select-mode-container'>
+        <button
+          disabled={!inputOrigin || !inputDestination}
+          className='buttonSearchcustom'
+          onClick={onSearchButtonClick}
         >
-            {props.directions && <DirectionsRenderer directions={props.directions}/>}
-        </GoogleMap>
-        {props.directions?<Info directions={props.directions}/>:null}
-
+          <span>Click!</span>
+          <span>Build Direction</span>
+        </button>
+        <Dropdown>
+          <Dropdown.Toggle>mode: {modeTraveling}</Dropdown.Toggle>
+          <Dropdown.Menu>
+            <Dropdown.Item
+              onClick={() => {
+                setModeTraveling('DRIVING');
+              }}
+              href='#/action-1'
+            >
+              Driving
+            </Dropdown.Item>
+            <Dropdown.Item
+              onClick={() => {
+                setModeTraveling('BICYCLING');
+              }}
+              href='#/action-2'
+            >
+              Bicycling
+            </Dropdown.Item>
+            <Dropdown.Item
+              onClick={() => {
+                setModeTraveling('TRANSIT');
+              }}
+              href='#/action-3'
+            >
+              Transit
+            </Dropdown.Item>
+            <Dropdown.Item
+              onClick={() => {
+                setModeTraveling('WALKING');
+              }}
+              href='#/action-4'
+            >
+              Walking{' '}
+            </Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
+      </div>
+      <GoogleMap
+        defaultZoom={7}
+        defaultCenter={new google.maps.LatLng(50.0, 28.0)}
+      >
+        {directions && <DirectionsRenderer directions={directions} />}
+      </GoogleMap>
+      {directions && <Info directions={directions} />}
     </>
-);
+  );
+});

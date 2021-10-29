@@ -3,9 +3,7 @@ import { AppContext } from '../../App';
 import './Search.css';
 
 
-
-function InputTag() {
-
+const InputTag = () => {
     const { tags, setTags } = useContext(AppContext);
     const tagInput = useRef(HTMLInputElement)
 
@@ -16,44 +14,44 @@ function InputTag() {
     }
 
     const inputKeyDown = (e) => {
-        const val = e.target.value;
-        if (e.key === 'Enter' && val) {
-            if (tags?.find((tag) => tag.toLowerCase() === val.toLowerCase())) {
-                return;
-            }
-            setTags([ ...tags, val ]);
-            e.target.value = '';
-        } else if (e.key === 'Backspace' && !val) {
-            removeTag(tags?.length - 1);
+      const val = e.target.value;
+      if (e.key === 'Enter' && val) {
+        if (tags?.find((tag) => tag.toLowerCase() === val.toLowerCase())) {
+          return;
         }
+        setTags([ ...tags, val ]);
+        e.target.value = '';
+      } else if (e.key === 'Backspace' && !val) {
+        removeTag(tags?.length - 1);
+      }
     };
 
     return (
-        <div className='input-tag'>
-            <ul className='input-tag__tags'>
-                {tags && tags.map((tag, i) => (
-                    <li key={tag}>
-                        {tag}
-                        <button
-                            type='button'
-                            onClick={() => {
-                                removeTag(i);
-                            }}
-                        >
-                            +
-                        </button>
-                    </li>
-                ))}
-                <li className='input-tag__tags__input'>
-                    <input
-                        className='waypoints'
-                        type='text'
-                        onKeyDown={inputKeyDown}
-                        ref={tagInput}
-                    />
-                </li>
-            </ul>
-        </div>
+      <div className='input-tag'>
+        <ul className='input-tag__tags'>
+          {tags && tags.map((tag, i) => (
+            <li key={tag}>
+              {tag}
+              <button
+                type='button'
+                onClick={() => {
+                  removeTag(i);
+                }}
+              >
+                +
+              </button>
+            </li>
+          ))}
+          <li className='input-tag__tags__input'>
+            <input
+              className='waypoints'
+              type='text'
+              onKeyDown={inputKeyDown}
+              ref={tagInput}
+            />
+          </li>
+        </ul>
+      </div>
     );
 }
 
