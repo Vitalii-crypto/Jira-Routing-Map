@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, {useContext,  useRef, useState} from 'react';
 import { Dropdown } from 'react-bootstrap';
 import {
   withScriptjs,
@@ -7,26 +7,25 @@ import {
   DirectionsRenderer,
 } from 'react-google-maps';
 import { compose, withProps } from 'recompose';
-
 import { AppContext } from '../../App';
 import Info from '../Info/Info';
-
 import './Map.css';
-
+import {Autocomplete} from "@react-google-maps/api";
 require('dotenv').config();
-
 const google = window.google;
 
-export const MapWithADirectionsRenderer = compose(
-  withProps({
-    googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_API_KEY}.exp&libraries=geometry,drawing,places`,
-    loadingElement: <div style={{ height: `100%` }} />,
-    containerElement: <div style={{ height: `650px` }} />,
-    mapElement: <div style={{ height: `100%` }} />,
-    mapId: 'c8d3fb7368eb6e72',
-  }),
-  withScriptjs,
-  withGoogleMap
+
+export const Map = compose(
+    withProps({
+      googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_API_KEY}.exp&libraries=geometry,drawing,places`,
+      loadingElement: <div style={{ height: `100%` }} />,
+      containerElement: <div style={{ height: `620px` }} />,
+      mapElement: <div style={{ height: `100%` }} />,
+      mapId: 'c8d3fb7368eb6e72',
+    }),
+    withScriptjs,
+    withGoogleMap,
+
 )(() => {
   const { tags } = useContext(AppContext);
 
@@ -58,6 +57,7 @@ export const MapWithADirectionsRenderer = compose(
         }
         let lat = results[0].geometry.location.lat();
         let lng = results[0].geometry.location.lng();
+
         coord = new google.maps.LatLng(lat, lng);
       });
 
@@ -69,100 +69,115 @@ export const MapWithADirectionsRenderer = compose(
       };
     };
 
+    let waypointsArr = [];
+
     if (tags) {
       await Promise.all(
-        tags.map(async (t) => {
-          const coords = await getCoords(t, true);
-          setWaypoints([...waypoints, coords]);
-        })
+          tags.map(async (t) => {
+            const coords = await getCoords(t, true);
+            setWaypoints([...waypoints, coords]);
+            waypointsArr.push(coords);
+          })
       );
     }
+
 
     const finalOrigin = await getCoords(inputOrigin);
     const finalDestination = await getCoords(inputDestination);
 
     await DirectionsService.route(
-      {
-        origin: finalOrigin,
-        destination: finalDestination,
-        waypoints: waypoints,
-        travelMode: modeTraveling,
-      },
-      (result, status) => {
-        if (status !== google.maps.DirectionsStatus.OK)
-          alert('can`t build directions, chose another points');
+        {
+          origin: finalOrigin,
+          destination: finalDestination,
+          waypoints: [...waypoints , ...waypointsArr],
+          travelMode: modeTraveling,
+        },
+        (result, status) => {
+          if (status !== google.maps.DirectionsStatus.OK)
+          {
+            alert('can`t build directions, chose another points');
+            return
+          }
 
-        setDirections(result);
-      }
+
+          setDirections(result);
+        }
     );
   };
 
+  const originRef = useRef();
+  const destinationRef = useRef();
   return (
-    <>
-      <div className='input-container'>
-        <label>
-          <p className='text-on-input'> Point A </p>
-          <input className='origin' onChange={onOriginInputChange} />
-        </label>
-        <label>
-          <p className='text-on-input'> Point B </p>
-          <input className='destination' onChange={onDestinationInputChange} />
-        </label>
-      </div>
-      <div className='select-mode-container'>
-        <button
-          disabled={!inputOrigin || !inputDestination}
-          className='buttonSearchcustom'
-          onClick={onSearchButtonClick}
+      <>
+
+        <div className='input-container'>
+          <label>
+            <Autocomplete onPlaceChanged={(e)=>{onOriginInputChange({target:originRef.current})}}>
+              <input ref={originRef} placeholder="Point A" className='origin' onChange={onOriginInputChange}/>
+            </Autocomplete>
+          </label>
+          <label>
+            <Autocomplete  onPlaceChanged={(e)=>{onDestinationInputChange({target:destinationRef.current})}}>
+              <input ref={destinationRef} placeholder="Point B" className='destination' onChange={onDestinationInputChange} />
+            </Autocomplete>
+          </label>
+        </div>
+        <div className='select-mode-container'>
+          <button
+              disabled={!inputOrigin || !inputDestination}
+              className='buttonSearchcustom'
+              onClick={onSearchButtonClick}
+          >
+            <span style={{color: 'white'}}>Click!</span>
+            <span style={{color: 'white'}}>Build Direction</span>
+          </button>
+          <Dropdown>
+            <Dropdown.Toggle>mode: {modeTraveling}</Dropdown.Toggle>
+            <Dropdown.Menu>
+              <Dropdown.Item
+                  onClick={() => {
+                    setModeTraveling('DRIVING');
+                  }}
+                  href='#/action-1'
+              >
+                Driving
+              </Dropdown.Item>
+              <Dropdown.Item
+                  onClick={() => {
+                    setModeTraveling('BICYCLING');
+                  }}
+                  href='#/action-2'
+              >
+                Bicycling
+              </Dropdown.Item>
+              <Dropdown.Item
+                  onClick={() => {
+                    setModeTraveling('TRANSIT');
+                  }}
+                  href='#/action-3'
+              >
+                Transit
+              </Dropdown.Item>
+              <Dropdown.Item
+                  onClick={() => {
+                    setModeTraveling('WALKING');
+                  }}
+                  href='#/action-4'
+              >
+                Walking{' '}
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </div>
+        <GoogleMap
+            defaultZoom={6}
+            defaultCenter={new google.maps.LatLng(49.0, 29.5)}
         >
-          <span>Click!</span>
-          <span>Build Direction</span>
-        </button>
-        <Dropdown>
-          <Dropdown.Toggle>mode: {modeTraveling}</Dropdown.Toggle>
-          <Dropdown.Menu>
-            <Dropdown.Item
-              onClick={() => {
-                setModeTraveling('DRIVING');
-              }}
-              href='#/action-1'
-            >
-              Driving
-            </Dropdown.Item>
-            <Dropdown.Item
-              onClick={() => {
-                setModeTraveling('BICYCLING');
-              }}
-              href='#/action-2'
-            >
-              Bicycling
-            </Dropdown.Item>
-            <Dropdown.Item
-              onClick={() => {
-                setModeTraveling('TRANSIT');
-              }}
-              href='#/action-3'
-            >
-              Transit
-            </Dropdown.Item>
-            <Dropdown.Item
-              onClick={() => {
-                setModeTraveling('WALKING');
-              }}
-              href='#/action-4'
-            >
-              Walking{' '}
-            </Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
-      </div>
-      <GoogleMap
-        defaultZoom={7}
-        defaultCenter={new google.maps.LatLng(50.0, 28.0)}
-      >
-        {directions && <DirectionsRenderer directions={directions} />}
-      </GoogleMap>
-      {directions && <Info directions={directions} />}
-    </>
+          {directions && <DirectionsRenderer directions={directions} />}
+        </GoogleMap>
+
+        {directions && <Info directions={directions} />}
+
+      </>
   );
 });

@@ -1,7 +1,8 @@
 import './App.css';
 import React, { useState } from 'react';
-import {MapWithADirectionsRenderer} from "./components/Map/Map";
+import {Map} from "./components/Map/Map";
 import Search from "./components/Search/Search";
+
 
 export const AppContext = React.createContext({});
 
@@ -12,7 +13,7 @@ function App() {
         <>
             <AppContext.Provider value={{tags, setTags}}>
 
-                <MapWithADirectionsRenderer/>
+                <Map/>
                 <Search/>
             </AppContext.Provider>
         </>
