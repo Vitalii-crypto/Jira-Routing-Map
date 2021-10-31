@@ -46,7 +46,6 @@ export const Map = compose(
   };
 
   const onSearchButtonClick = async (e) => {
-    console.log(tags)
     const geocoder = new google.maps.Geocoder();
 
     const getCoords = async (address, isObj = false) => {
@@ -94,7 +93,6 @@ export const Map = compose(
           travelMode: modeTraveling,
         },
         (result, status) => {
-          console.log(result)
           if (status !== google.maps.DirectionsStatus.OK)
           {
             alert('can`t build directions, chose another points');
