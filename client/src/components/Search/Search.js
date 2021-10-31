@@ -1,10 +1,9 @@
 import React, { useContext, useRef } from 'react';
 import { AppContext } from '../../App';
 import './Search.css';
-import {Autocomplete, LoadScript} from "@react-google-maps/api";
 
 
-const InputTag = () => {
+function InputTag(){
     const { tags, setTags } = useContext(AppContext);
     const tagInput = useRef(HTMLInputElement)
 

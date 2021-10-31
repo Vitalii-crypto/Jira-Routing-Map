@@ -7,19 +7,14 @@ import {
   DirectionsRenderer,
 } from 'react-google-maps';
 import { compose, withProps } from 'recompose';
-
 import { AppContext } from '../../App';
 import Info from '../Info/Info';
-
 import './Map.css';
-
 import {Autocomplete} from "@react-google-maps/api";
-
 require('dotenv').config();
-
 const google = window.google;
 
-export const MapWithADirectionsRenderer = compose(
+export const Map = compose(
     withProps({
       googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_API_KEY}.exp&libraries=geometry,drawing,places`,
       loadingElement: <div style={{ height: `100%` }} />,

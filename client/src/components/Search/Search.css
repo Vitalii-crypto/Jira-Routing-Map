@@ -4,21 +4,7 @@
     width: 300px;
     margin-left: 40px;
 }
-.search-input{
-    width: 150px;
-}
 
-.add-button{
-    margin-left: 40px;
-    width: 200px;
-    background-color: red;
-}
-
-.del-button{
-    background-color: #c7c7c7;
-    width: 90px;
-
-}
 .input-search-container{
     margin-top: 80px;
 }
@@ -27,18 +13,14 @@
     margin-left: 20px;
 }
 
-
-
-
-
 .input-tag {
-    /*background: white;*/
-    /*border: 1px solid #d6d6d6;*/
+
     border-radius: 2px;
     display: flex;
     flex-wrap: wrap;
     background: #E5E5E5;
-    /*padding: 5px 5px 0;*/
+    color: #E5E5E5;
+    font-size: 16px;
     margin-top: 16px;
     padding-top: 11px;
     padding-left: 430px;
@@ -59,9 +41,10 @@
 
 .input-tag__tags li {
     align-items: center;
-    background: #4285F4;
+    background: rgb(0, 70, 175);;
     border-radius: 2px;
     color: white;
+    font-size: 16px;
     display: flex;
     font-weight: 300;
     list-style: none;
