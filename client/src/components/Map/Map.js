@@ -14,6 +14,7 @@ import {Autocomplete} from "@react-google-maps/api";
 require('dotenv').config();
 const google = window.google;
 
+
 export const Map = compose(
     withProps({
       googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_API_KEY}.exp&libraries=geometry,drawing,places`,

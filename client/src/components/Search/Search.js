@@ -3,6 +3,7 @@ import { AppContext } from '../../App';
 import './Search.css';
 
 
+
 function InputTag(){
     const { tags, setTags } = useContext(AppContext);
     const tagInput = useRef(HTMLInputElement)
