@@ -1,6 +1,7 @@
 import React from 'react';
 import './Info.css';
 
+
 export default function Info(props){
     return(
         <div className='result-container'>

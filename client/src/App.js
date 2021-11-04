@@ -4,6 +4,7 @@ import {Map} from "./components/Map/Map";
 import Search from "./components/Search/Search";
 
 
+
 export const AppContext = React.createContext({});
 
 function App() {
