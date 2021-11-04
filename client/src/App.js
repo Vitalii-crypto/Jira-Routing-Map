@@ -12,7 +12,6 @@ function App() {
     return (
         <>
             <AppContext.Provider value={{tags, setTags}}>
-
                 <Map/>
                 <Search/>
             </AppContext.Provider>
