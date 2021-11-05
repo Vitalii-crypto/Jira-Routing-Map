@@ -1,4 +1,4 @@
-import React, {useContext,  useRef, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import { Dropdown } from 'react-bootstrap';
 import {
   withScriptjs,
@@ -72,16 +72,18 @@ export const Map = compose(
 
     let waypointsArr = [];
 
-    if (tags) {
-      await Promise.all(
-          tags.map(async (t) => {
-            const coords = await getCoords(t, true);
-            setWaypoints([...waypoints, coords]);
-            waypointsArr.push(coords);
-          })
-      );
-    }
+      if (tags?.length) {
+          await Promise.all(
+              tags.map(async (t) => {
+                  const coords = await getCoords(t, true);
+                  waypointsArr.push(coords);
+              })
+          );
 
+          setWaypoints([...waypoints, ...waypointsArr]);
+      } else {
+          setWaypoints([]);
+      }
 
     const finalOrigin = await getCoords(inputOrigin);
     const finalDestination = await getCoords(inputDestination);
@@ -105,10 +107,15 @@ export const Map = compose(
         }
     );
   };
+    useEffect(() => {
+        if (tags) searchButton.current.click();
+    }, [tags]);
 
   const originRef = useRef();
   const destinationRef = useRef();
-  return (
+    const searchButton = useRef(HTMLButtonElement);
+
+    return (
       <>
 
         <div className='input-container'>
@@ -128,6 +135,7 @@ export const Map = compose(
               disabled={!inputOrigin || !inputDestination}
               className='buttonSearchcustom'
               onClick={onSearchButtonClick}
+              ref={searchButton}
           >
             <span style={{color: 'white'}}>Click!</span>
             <span style={{color: 'white'}}>Build Direction</span>
