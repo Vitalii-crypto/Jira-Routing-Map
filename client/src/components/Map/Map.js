@@ -82,8 +82,6 @@ export const Map = compose(
 
         const finalOrigin = await getCoords(inputOrigin);
         const finalDestination = await getCoords(inputDestination);
-     console.log( [...waypoints, ...waypointsArr])
-        console.log(tags);
         await DirectionsService.route(
             {
                 origin: finalOrigin,
