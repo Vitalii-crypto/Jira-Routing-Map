@@ -78,20 +78,17 @@ export const Map = compose(
                     waypointsArr.push(coords);
                 })
             );
-
-            setWaypoints([...waypoints, ...waypointsArr]);
-        } else {
-            setWaypoints([]);
         }
 
         const finalOrigin = await getCoords(inputOrigin);
         const finalDestination = await getCoords(inputDestination);
-
+     console.log( [...waypoints, ...waypointsArr])
+        console.log(tags);
         await DirectionsService.route(
             {
                 origin: finalOrigin,
                 destination: finalDestination,
-                waypoints: [...waypoints, ...waypointsArr],
+                waypoints: waypointsArr,
                 travelMode: modeTraveling,
             },
             (result, status) => {
@@ -100,7 +97,7 @@ export const Map = compose(
                     return
                 }
 
-
+                console.log(result)
                 setDirections(result);
             }
         );
